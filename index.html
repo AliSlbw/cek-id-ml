@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Website untuk mengecek akun mobile legends anda"/>
+  <meta property="og:title" content="Cek Akun Mobile Legends"/>
+  <title>Cek Akun Mobile Legends</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="img/icon.png" />
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --bg-card: rgba(255,255,255,0.05);
+      --card: #161616;
+      --border: rgba(255,255,255,0.1);
+      --accent: #fe2c55;
+      --accent2: #25f4ee;
+      --text: #efefef;
+      --muted: #555;
+      --radius: 12px;
+    }
+    
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: #16225e;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+    }
+    
+    .wraper {
+      width: 100%;
+      max-width: 390px;
+      position: relative;
+      z-index: 1;
+      align-items: center;
+      gap: 28px;
+      animation: fadeUp 0.7s both ease;
+    }
+    
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .wrap-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    
+    .logo {
+      width: 150px;
+      height: 100px;
+      position: relative;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .title-utama {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.49rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .subtitle {
+      color: var(--text);
+      letter-spacing: 0.6px;
+    }
+    
+    .card {
+      width: 100%;
+      max-width: 390px;
+      background: var(--bg-card);
+      
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px 20px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    
+    .card-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    
+    .card-desk {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 22px;
+    }
+    
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+    
+    label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.6px;
+    }
+    
+    input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    
+    input::placeholder {
+      color: var(--text);
+      font-size: 0.8rem;
+    }
+    
+    input:focus {
+      border-color: var(--border);
+      background: rgba(240,192,64,0.05);
+      box-shadow: 0 0 0 3px rgba(240,192,64,0.12);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 4px;
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.85px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .btn:hover {
+      opacity: 0.85;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn:disabled{
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(74,158,255,0.08);
+      border: 1px solid rgba(74,158,255,0.25);
+      border-radius: 12px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .result.show { display: block; }
+    .result.error { background: rgba(255,80,80,0.08); border-color: rgba(255,80,80,0.25); }
+
+    .result-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: 0.88rem; }
+    .result-row:last-child { margin-bottom: 0; }
+    .result-key { color: var(--text); }
+    .result-val { font-weight: 700; color: var(--gold2); text-align: right; }
+    .result.error .result-val { color: #ff7070; }
+    
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0 12px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: var(--text);
+      letter-spacing: 2px;
+    }
+    
+    .footer a{
+      text-decoration: none;
+      color: #4a9eff;
+      margin-left: 2px;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+      transition: color 0.2s;
+      color: white;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid white;
+      border-top-color: var(--border);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="wraper">
+    <div class="wrap-logo">
+      <div class="logo">
+        <img src="/img/logo.webp" loading="lazy" alt="logo mlbb"/>
+      </div>
+      <div class="title-utama">Cek ID Akun Mobile Legends</div>
+      <p class="subtitle">Cek Username dan Region Akun Mobile Legends lewat ID</p>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">ID Akun Mobile Legends</div>
+      <div class="card-desk">Masukkan User ID dan Server ID akun Mobile Legends Anda</div>
+      
+      <div class="field">
+        <label for="userId">User ID</label>
+        <input id="userId" type="number" placeholder="Masukkan User ID" />
+      </div>
+      
+      <div class="field">
+        <label for="serverId">Server ID</label>
+        <input id="serverId" type="number" placeholder="Masukkan Server ID" />
+      </div>
+      
+      <button class="btn" id="cekBtn" onclick="cekAkun()" >Cek Sekarang!</button>
+      
+      <div class="result" id="result"></div>
+      
+      <div class="divider"></div>
+      <div class="footer">Created By<a href="tiktok.com@barzakbar">@Akbar</a></div>
+    </div>
+  </div>
+  <script>
+    async function cekAkun() {
+      const userId = document.getElementById('userId').value.trim();
+      const serverId = document.getElementById('serverId').value.trim();
+      const btn = document.getElementById('cekBtn');
+      const result = document.getElementById('result');
+      
+      if (!userId || !serverId) {
+        showResult('error', [{ k: 'Error', v: 'User ID dan Server ID wajib diisi!'}]);
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Memeriksa...';
+      result.className = 'result';
+      //result.style.display = 'none';
+      
+      try {
+        const res = await fetch('/api/linktest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, serverId })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success === true) {
+          showResult('success', [
+            { k: 'Username', v: data.NickName || ''},
+            { k: 'User ID',  v: userId },
+            { k: 'Server ID', v: serverId },
+            { k: 'Region',   v: data.Country || ''},
+          ]);
+        }
+        
+      } catch (err) {
+        showResult('error', [{ k: 'Error', v: 'Gagal terhubung ke server.' + err}]);
+      }
+      
+      btn.disabled = false;
+      btn.innerHTML = 'Cek Sekarang!';
+    }
+    
+    function showResult(type, rows) {
+      const el = document.getElementById('result');
+      el.className = 'result show' + (type === 'error' ? ' error' : '');
+      el.innerHTML = rows.map(r =>
+        `<div class="result-row"><span class="result-key">${r.k}</span><span class="result-val">${r.v}</span></div>`
+      ).join('');
+    }
+    
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') cekAkun();
+    });
+  </script>
+</body>
+</html>
