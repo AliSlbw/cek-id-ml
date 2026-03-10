@@ -298,7 +298,7 @@
       //result.style.display = 'none';
       
       try {
-        const res = await fetch('/api/linktest', {
+        const res = await fetch('/api/script', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, serverId })
@@ -316,7 +316,7 @@
         }
         
       } catch (err) {
-        showResult('error', [{ k: 'Error', v: 'Gagal terhubung ke server.' + err}]);
+        showResult('error', [{ k: 'Error', v: 'Gagal terhubung ke server.'}]);
       }
       
       btn.disabled = false;
